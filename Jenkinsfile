@@ -2,19 +2,19 @@ pipeline {
     agent any 
 
     stages {
-        stage('Hello Python') {
+        stage('Run App') {
             steps {
-                // Inline command to verify Python is working
-                sh 'python3 -c "print(\'Hello World from Python!\')"'
+                // This runs your existing app.py file
+                sh 'python3 app.py'
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                // 'SonarQubeServer' must match the name in Jenkins Global Configuration
+                // Ensure 'SonarQubeServer' is the name you saved in Jenkins System settings
                 withSonarQubeEnv('SonarQubeServer') {
                     script {
-                        // Locate the scanner tool defined in Global Tool Configuration
+                        // This uses the SonarScanner tool you defined in Jenkins Global Tool Configuration
                         def scannerHome = tool 'SonarScanner' 
                         sh "${scannerHome}/bin/sonar-scanner"
                     }
@@ -24,7 +24,7 @@ pipeline {
         
         stage("Quality Gate") {
             steps {
-                // Fails the build if SonarQube analysis doesn't meet your project's standards
+                // This waits for SonarQube to finish and tell Jenkins if the code passed or failed
                 timeout(time: 1, unit: 'HOURS') {
                     waitForQualityGate abortPipeline: true
                 }
@@ -32,3 +32,4 @@ pipeline {
         }
     }
 }
+
