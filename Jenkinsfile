@@ -16,25 +16,28 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                // 'SonarQube' must match the name in Manage Jenkins -> System -> SonarQube Server
-                withSonarQubeEnv('SonarQubeServer') {
-                    sh """
-                        sonar-scanner \
+                script {
+                    // 1. This captures the actual installation path of the tool.
+                    // 'SonarScanner' must match the Name in Manage Jenkins > Tools
+                    def scannerHome = tool 'SonarScanner'
+                    
+                    // 2. Wrap the execution in the environment configured for your server.
+                    // 'SonarQubeServer' must match the name in Manage Jenkins > System
+                    withSonarQubeEnv('SonarQubeServer') {
+                        sh "${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey=NewProject \
-                        -Dsonar.projectName="NewProject" \
+                        -Dsonar.projectName=NewProject \
                         -Dsonar.branch.name=master \
                         -Dsonar.sources=. \
                         -Dsonar.language=py \
-                        -Dsonar.python.version=3
-                    """
+                        -Dsonar.python.version=3"
+                    }
                 }
             }
         }
 
         stage("Quality Gate") {
             steps {
-                // This pauses the pipeline until SonarQube finishes the background task.
-                // Note: Requires a Webhook configured in SonarQube pointing to Jenkins.
                 timeout(time: 5, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
@@ -46,13 +49,5 @@ pipeline {
         always {
             echo 'Pipeline execution finished.'
         }
-        success {
-            echo 'Code analysis passed successfully!'
-        }
-        failure {
-            echo 'Pipeline failed. Check the SonarQube Quality Gate or Logs.'
-        }
     }
 }
-
-
