@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         // Must match the name in Manage Jenkins -> Tools -> SonarQube Scanner
-        sonarScanner 'SonarScanner'
+        'hudson.plugins.sonar.SonarRunnerInstallation' 'SonarScanner'
     }
 
     stages {
