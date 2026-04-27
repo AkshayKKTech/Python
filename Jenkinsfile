@@ -1,35 +1,58 @@
 pipeline {
-    agent any 
+    agent any
+
+    tools {
+        // Must match the name in Manage Jenkins -> Tools -> SonarQube Scanner
+        sonarScanner 'SonarScanner'
+    }
 
     stages {
-        stage('Run App') {
+        stage('Checkout') {
             steps {
-                // This runs your existing app.py file
-                sh 'python3 app.py'
+                // Pulls code from your git repository
+                checkout scm
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                // Ensure 'SonarQubeServer' is the name you saved in Jenkins System settings
+                // 'SonarQube' must match the name in Manage Jenkins -> System -> SonarQube Server
                 withSonarQubeEnv('SonarQubeServer') {
-                    script {
-                        // This uses the SonarScanner tool you defined in Jenkins Global Tool Configuration
-                        def scannerHome = tool 'SonarScanner' 
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
+                    sh """
+                        sonar-scanner \
+                        -Dsonar.projectKey=NewProject \
+                        -Dsonar.projectName="NewProject" \
+                        -Dsonar.branch.name=master \
+                        -Dsonar.sources=. \
+                        -Dsonar.language=py \
+                        -Dsonar.python.version=3
+                    """
                 }
             }
         }
-        
+
         stage("Quality Gate") {
             steps {
-                // This waits for SonarQube to finish and tell Jenkins if the code passed or failed
-                timeout(time: 1, unit: 'HOURS') {
+                // This pauses the pipeline until SonarQube finishes the background task.
+                // Note: Requires a Webhook configured in SonarQube pointing to Jenkins.
+                timeout(time: 5, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
             }
         }
     }
+
+    post {
+        always {
+            echo 'Pipeline execution finished.'
+        }
+        success {
+            echo 'Code analysis passed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check the SonarQube Quality Gate or Logs.'
+        }
+    }
 }
+
 
