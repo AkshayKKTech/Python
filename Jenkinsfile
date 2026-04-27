@@ -27,7 +27,6 @@ pipeline {
                         sh "${scannerHome}/bin/sonar-scanner \
                         -Dsonar.projectKey=NewProject \
                         -Dsonar.projectName=NewProject \
-                        -Dsonar.branch.name=master \
                         -Dsonar.sources=. \
                         -Dsonar.language=py \
                         -Dsonar.python.version=3"
