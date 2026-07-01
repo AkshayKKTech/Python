@@ -3,7 +3,7 @@ pipeline {
 
     tools {
         // Must match the name in Manage Jenkins -> Tools -> SonarQube Scanner
-        sonarScanner 'SonarScanner'
+        "sonar-scanner" 'SonarScanner'
     }
 
     stages {
@@ -18,8 +18,8 @@ pipeline {
             steps {
                 script {
                     withSonarQubeEnv('SonarQube') {
-                    // Executes the static code scanning process
-                    sh 'sonar-scanner'
+                        def scannerHome = tool 'SonarScanner'
+                        sh "${scannerHome}/bin/sonar-scanner"
 
                     }
                 }
