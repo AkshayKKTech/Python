@@ -1,11 +1,6 @@
 pipeline {
     agent any
-
-    tools {
-        // Must match the name in Manage Jenkins -> Tools -> SonarQube Scanner
-        "sonar-scanner" 'SonarScanner'
-    }
-
+    
     stages {
         stage('Checkout') {
             steps {
