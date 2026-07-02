@@ -1,3 +1,3 @@
 def call() {
-  echo "Hello from Jenkins library"
+  sh "echo Hello from Jenkins library"
 }
