@@ -22,13 +22,13 @@ pipeline {
 
                     }
                 }
-            }*/
+            }
+        }*/
         stage('Build') {
             steps {
                 echo " Building the app"
                 sh "python3 app.py"
     }
-}
 
     post {
         always {
