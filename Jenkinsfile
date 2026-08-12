@@ -1,5 +1,7 @@
 pipeline {
-    agent any
+    agent {
+        label 'Agent1'
+    }
     
     stages {
         stage('Checkout') {
@@ -9,7 +11,7 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
+      /*  stage('SonarQube Analysis') {
             steps {
                 script {
                     def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
@@ -21,8 +23,12 @@ pipeline {
                     }
                 }
             }
-        }
+        stage('Build') {
+            steps {
+                echo " Building the app"
+                sh "python3 app.py"
     }
+}
 
     post {
         always {
