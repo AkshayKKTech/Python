@@ -19,7 +19,7 @@ jobs:
       - name: Build python
         run: python app.py
       - name: Docker image build
-        run: docker build -t akshaykkdocker623/pythonapp:v1
+        run: docker build -t akshaykkdocker623/pythonapp:v1 .
         
 
       - name: Docker login
