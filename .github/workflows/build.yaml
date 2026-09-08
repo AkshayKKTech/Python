@@ -28,7 +28,9 @@ jobs:
       - name: Docker login
         uses: docker/login-action@v4
         with:
-          username: ${{vars.DOCKERHUB_LOGIN}}
-          password: ${{secrets.DOCKERLOGIN_PASSWORD}}
+          username: ${{ vars.DOCKERHUB_LOGIN }}
+          password: ${{ secrets.DOCKERLOGIN_PASSWORD }}
+      - name: Docker image push
+        run: docker push akshaykkdocker623/pythonapp:v1
 
       
