@@ -1,0 +1,8 @@
+name: Learning github actions
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: To view files inside project
+        run: ls 
