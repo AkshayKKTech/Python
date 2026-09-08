@@ -9,5 +9,5 @@ jobs:
     steps:
       - name: Checkout stage
         uses: actions/checkout@v7
-      - name: To view files inside project
-        run: ls 
+      - name: Build python
+        run: python app.py
