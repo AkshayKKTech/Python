@@ -7,5 +7,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout stage
+        uses: actions/checkout@v7
       - name: To view files inside project
         run: ls 
